@@ -45,6 +45,7 @@ class User_details:
 
 
 def clear_screen():
+    # os clear command not supported in windows os
     os.system("clear")
 
 
@@ -605,7 +606,8 @@ if __name__ == '__main__':
     # uncomment below if default data is required
     # admin/admin is created for librarian or admin user
     # student/student is created for accessing student user
-    
+
+    '''    
     for count in range(1,5):
         book = Books("Title" + str(count), "Author" + str(count), \
                      "Publication" + str(count), "Description" + str(count), count)
@@ -617,7 +619,7 @@ if __name__ == '__main__':
     user_records.append(ud)
     print(f"{user_records[1].uid} Default student ID required for "
           "allocating book using admin account")
-    
+    '''
 
     Main()
     
