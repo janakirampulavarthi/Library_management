@@ -237,7 +237,50 @@ class Admin:
                 time.sleep(1)
                 break
 
+    def edit_book(self):
+        '''
+        get input(book title) froma dmin and update book records if needed
+        '''
+        
+        clear_screen()
+        book_obj = self.get_book()
+        if not book_obj:
+            return
+        
+        print(
+        f'''Modification for number of copies/availed copies/available
+        copies is not allowed, use Lend book/Return lend book from main menu
+        
+        Edit existing details listed below for book {book_obj.title}\n''')
+        for key, val in book_obj.__dict__.items():
+            if key in ['title', 'author', 'publication', 'description']:
+                print(f"{key} : {val}")
 
+        print("Press ENTER if no chnage is required for any of the following\n")        
+
+        title = input("\nEnter book title: ")
+        author = input("Enter book author: ")
+        publication = input("Enter book publication: ")
+        description = input("Enter description: ")
+
+        for book in book_records:
+            if book.bid == book_obj.bid:
+                if title:
+                    book.title = title
+                if author:
+                    book.author = author
+                if publication:
+                    book.publication = publication
+                if description:
+                    book.description = description
+                print("\nRequired changes are done, Final output below\n")
+                for key, val in book.__dict__.items():
+                    if key in ['title', 'author', 'publication', 'description']:
+                        print(f"{key} : {val}")
+                time.sleep(5)
+                break
+                
+        
     def return_book(self):
         '''
         get input(book title and student id) from admin and update
@@ -302,7 +345,8 @@ class Admin:
             elif choice == 2:
                 string = input("Enter match string: ")
                 matches = [book for book in book_records \
-                           if book.title.startswith(string)]
+                           if book.title.startswith(string.upper())
+                           or book.title.startswith(string.lower())]
                 if matches:
                     return self.get_record(matches)
                 else:
@@ -470,13 +514,14 @@ class Main(Login, Admin):
             'admin_menu': {
                 1: self.add_book,
                 2: self.remove_book,
-                3: self.lend_book,
-                4: self.return_book,
-                5: self.list_all,
-                6: self.available,
-                7: self.unavailable,
-                8: exit_script,
-                9: self.login_page,
+                3: self.edit_book,
+                4: self.lend_book,
+                5: self.return_book,
+                6: self.list_all,
+                7: self.available,
+                8: self.unavailable,
+                9: exit_script,
+                10: self.login_page,
             },
             'student_menu' : {
                 1: self.list_all,
@@ -557,13 +602,14 @@ class Main(Login, Admin):
         
         1. Add new book in library
         2. Remove book from library
-        3. Lend book
-        4. Return Lended book
-        5. List all books
-        6. List available books
-        7. List lended books
-        8. Exit
-        9. Return to Main menu\n''')
+        3. Edit existing book in library
+        4. Lend book
+        5. Return Lended book
+        6. List all books
+        7. List available books
+        8. List lended books
+        9. Exit
+        10. Return to Main menu\n''')
         choice = get_input()
         if choice:
             func = self.menu('admin_menu', choice)
@@ -607,7 +653,7 @@ if __name__ == '__main__':
     # admin/admin is created for librarian or admin user
     # student/student is created for accessing student user
 
-    '''    
+    '''
     for count in range(1,5):
         book = Books("Title" + str(count), "Author" + str(count), \
                      "Publication" + str(count), "Description" + str(count), count)
@@ -622,5 +668,3 @@ if __name__ == '__main__':
     '''
 
     Main()
-    
-
